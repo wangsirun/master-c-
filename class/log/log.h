@@ -60,22 +60,35 @@ public:
         static logs instance;
         return &instance;
     }
-    void write_log(string content)
+    enum LEVEL
     {
-        for (size_t i = 0; i < 10; i++)
+        DEBUG,
+        INFO,
+        WARN,
+        ERROR,
+    };
+    void write_log(LEVEL level, string content)
+    {
+        switch (level)
         {
-            file << Time().now() + " "
-                 << "INFO: "
-                 << content << endl;
+        case DEBUG:
+            file << Time().now() + " [debug] " << content << endl;
+            break;
+        case INFO:
+            file << Time().now() + " [info] " << content << endl;
+            break;
+        case WARN:
+            file << Time().now() + " [warn] " << content << endl;
+            break;
+        case ERROR:
+            file << Time().now() + " [error] " << content << endl;
+            break;
+
+        default:
+            break;
         }
     }
     void flush() { file.flush(); }
-    enum LEVEL
-    {
-        INFO,
-        DEBUG,
-        WARN,
-    };
 };
 
 logs::logs(/* args */)
@@ -89,13 +102,25 @@ logs::~logs()
     cout << "del instance logs" << endl;
 }
 
-#define LOG_DEBUG(format)                        \
-    {                                            \
-        logs::get_instance()->write_log(format); \
-        logs::get_instance()->flush();           \
+#define LOG_DEBUG(format)                                            \
+    {                                                                \
+        logs::get_instance()->write_log(logs::LEVEL::DEBUG, format); \
+        logs::get_instance()->flush();                               \
     }
-// #define LOG_INFO(format, ...) if(0 == m_close_log) {Log::get_instance()->write_log(1, format, ##__VA_ARGS__); Log::get_instance()->flush();}
-// #define LOG_WARN(format, ...) if(0 == m_close_log) {Log::get_instance()->write_log(2, format, ##__VA_ARGS__); Log::get_instance()->flush();}
-// #define LOG_ERROR(format, ...) if(0 == m_close_log) {Log::get_instance()->write_log(3, format, ##__VA_ARGS__); Log::get_instance()->flush();}
+#define LOG_INFO(format)                                            \
+    {                                                               \
+        logs::get_instance()->write_log(logs::LEVEL::INFO, format); \
+        logs::get_instance()->flush();                              \
+    }
+#define LOG_WARN(format)                                            \
+    {                                                               \
+        logs::get_instance()->write_log(logs::LEVEL::WARN, format); \
+        logs::get_instance()->flush();                              \
+    }
+#define LOG_ERROR(format)                                            \
+    {                                                                \
+        logs::get_instance()->write_log(logs::LEVEL::ERROR, format); \
+        logs::get_instance()->flush();                               \
+    }
 
 #endif // __LOG_
