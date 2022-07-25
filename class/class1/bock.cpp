@@ -31,11 +31,11 @@ int main(int argc, char const *argv[])
     {
         pool[i] = std::thread(test, i);
     }
+    go();
     for (auto &p : pool)
     {
         p.join();
     }
-    go();
 
     return 0;
 }

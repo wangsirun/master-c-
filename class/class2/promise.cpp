@@ -7,6 +7,7 @@ void Thread_Fun1(std::promise<int> &p)
     //为了突出效果，可以使线程休眠5s
     // std::this_thread::sleep_for(std::chrono::seconds(5));
 
+    std::cout << std::this_thread::get_id() << std::endl;
     int iVal = 233;
     std::cout << "传入数据(int)：" << iVal << std::endl;
 
@@ -17,6 +18,7 @@ void Thread_Fun1(std::promise<int> &p)
 void Thread_Fun2(std::future<int> &f)
 {
     //阻塞函数，直到收到相关联的std::promise对象传入的数据
+    std::cout << std::this_thread::get_id() << std::endl;
     auto iVal = f.get(); // iVal = 233
 
     std::cout << "收到数据(int)：" << iVal << std::endl;
@@ -35,7 +37,7 @@ int main()
     std::thread t2(Thread_Fun2, std::ref(fu1));
 
     //阻塞至线程结束
-    t1.join();
+    t1.detach();
     t2.join();
 
     return 1;
