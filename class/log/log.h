@@ -23,7 +23,7 @@ public:
     struct timeval val;
 };
 
-string Time::now()
+inline string Time::now()
 {
     char m_buf[48] = {};
     struct tm my_tm = *times;
@@ -33,7 +33,7 @@ string Time::now()
     return m_buf;
 }
 
-Time::Time(/* args */)
+inline Time::Time(/* args */)
 {
     time(&_now);
     times = localtime(&_now);
@@ -41,7 +41,7 @@ Time::Time(/* args */)
     gettimeofday(&now, NULL);
 }
 
-Time::~Time()
+inline Time::~Time()
 {
 }
 
@@ -91,13 +91,13 @@ public:
     void flush() { file.flush(); }
 };
 
-logs::logs(/* args */)
+inline logs::logs(/* args */)
 {
     cout << "instance is called" << endl;
     file = ofstream("./test.log", ios::app);
 }
 
-logs::~logs()
+inline logs::~logs()
 {
     cout << "del instance logs" << endl;
 }
